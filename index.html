@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="tr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Proje Veri Formu</title>
+		<style>
+			:root {
+				--black: #0d0d0d;
+				--white: #f5f3ef;
+				--orange: #e8560a;
+				--orange-dark: #c44408;
+				--orange-extra-dark: #9c3a0c;
+				--orange-light: #ff7a35;
+				--gray-100: #f0ede8;
+				--gray-200: #dddad4;
+				--gray-400: #9c9890;
+				--gray-600: #5c5a56;
+				--gray-800: #2a2926;
+				--font-display: "Barlow Condensed", sans-serif;
+				--font-body: "Barlow", sans-serif;
+				--nav-h: 72px;
+				--transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				background: var(--black);
+				color: var(--white);
+				font-family: var(--font-body);
+			}
+
+			body {
+				padding-bottom: 120px;
+			}
+
+			::selection {
+				background: var(--orange);
+				color: var(--black);
+			}
+
+			/* ---------- top bar ---------- */
+			.topbar {
+				height: var(--nav-h);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 32px;
+				border-bottom: 1px solid var(--gray-800);
+				position: sticky;
+				top: 0;
+				background: rgba(13, 13, 13, 0.92);
+				backdrop-filter: blur(6px);
+				z-index: 50;
+			}
+
+			.topbar .mark {
+				font-family: var(--font-display);
+				font-size: 26px;
+				letter-spacing: 0.02em;
+				font-weight: 600;
+			}
+			.topbar .mark span {
+				color: var(--orange);
+			}
+
+			.topbar .status {
+				font-size: 13px;
+				color: var(--gray-400);
+			}
+
+			/* ---------- hero / intro ---------- */
+			.intro {
+				padding: 72px 32px 48px;
+				border-bottom: 1px solid var(--gray-800);
+				max-width: 980px;
+			}
+
+			.intro .num {
+				color: var(--orange);
+				font-family: var(--font-display);
+				font-size: 15px;
+				letter-spacing: 0.04em;
+				margin: 0 0 10px;
+			}
+
+			.intro h1 {
+				font-family: var(--font-display);
+				font-weight: 600;
+				font-size: clamp(38px, 6vw, 68px);
+				line-height: 0.98;
+				margin: 0 0 20px;
+				letter-spacing: -0.01em;
+			}
+
+			.intro p {
+				max-width: 62ch;
+				color: var(--gray-200);
+				font-size: 16px;
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ---------- layout ---------- */
+			form {
+				display: block;
+			}
+
+			.section {
+				border-bottom: 1px solid var(--gray-800);
+				padding: 56px 32px;
+				display: grid;
+				grid-template-columns: 280px minmax(0, 1fr);
+				gap: 40px;
+				max-width: 1240px;
+			}
+
+			.section-head {
+				position: sticky;
+				top: calc(var(--nav-h) + 24px);
+				align-self: start;
+			}
+
+			.section-head h2 {
+				font-family: var(--font-display);
+				font-weight: 600;
+				font-size: 30px;
+				margin: 0 0 10px;
+				color: var(--white);
+			}
+
+			.section-head p {
+				color: var(--gray-400);
+				font-size: 14px;
+				line-height: 1.55;
+				margin: 0;
+				max-width: 34ch;
+			}
+
+			.fields {
+				display: flex;
+				flex-direction: column;
+				gap: 22px;
+				min-width: 0;
+			}
+
+			.row {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 22px;
+			}
+
+			@media (max-width: 860px) {
+				.section {
+					grid-template-columns: 1fr;
+				}
+				.section-head {
+					position: static;
+				}
+				.row {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			/* ---------- field styling ---------- */
+			label.field {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			label.field .lbl {
+				font-size: 13px;
+				color: var(--gray-400);
+				font-family: var(--font-body);
+			}
+
+			label.field .lbl b {
+				color: var(--orange-light);
+				font-weight: 600;
+			}
+
+			input[type="text"],
+			input[type="url"],
+			input[type="number"],
+			textarea {
+				background: transparent;
+				border: none;
+				border-bottom: 1px solid var(--gray-600);
+				color: var(--white);
+				font-family: var(--font-body);
+				font-size: 16px;
+				padding: 10px 2px;
+				outline: none;
+				transition:
+					border-color var(--transition),
+					background var(--transition);
+				width: 100%;
+				resize: vertical;
+			}
+
+			textarea {
+				min-height: 64px;
+				line-height: 1.5;
+			}
+
+			input::placeholder,
+			textarea::placeholder {
+				color: var(--gray-600);
+			}
+
+			input:hover,
+			textarea:hover {
+				border-bottom-color: var(--gray-400);
+			}
+
+			input:focus,
+			textarea:focus {
+				border-bottom-color: var(--orange);
+				background: rgba(232, 86, 10, 0.05);
+			}
+
+			input:required:invalid {
+				border-bottom-color: var(--gray-600);
+			}
+
+			/* ---------- dynamic list groups ---------- */
+			.list-group {
+				border: 1px solid var(--gray-800);
+				padding: 18px;
+			}
+
+			.list-group > .lbl {
+				font-size: 13px;
+				color: var(--gray-400);
+				margin-bottom: 12px;
+				display: block;
+			}
+
+			.list-items {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				list-style: none;
+				counter-reset: custom-counter;
+			}
+
+			.list-item {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				counter-increment: custom-counter;
+			}
+
+			.list-item::before {
+				content: counter(custom-counter) ".";
+				font-family: var(--font-display);
+				color: var(--gray-600);
+				font-size: 14px;
+				width: 20px;
+				flex-shrink: 0;
+				text-align: right;
+			}
+
+			.list-item input {
+				flex: 1;
+			}
+
+			.icon-btn {
+				background: transparent;
+				border: 1px solid var(--gray-800);
+				color: var(--gray-400);
+				width: 30px;
+				height: 30px;
+				flex-shrink: 0;
+				cursor: pointer;
+				font-size: 16px;
+				line-height: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition:
+					border-color var(--transition),
+					color var(--transition),
+					background var(--transition);
+			}
+			.icon-btn:hover {
+				border-color: var(--orange);
+				color: var(--orange-light);
+			}
+
+			.add-row {
+				margin-top: 12px;
+				background: transparent;
+				border: 1px dashed var(--gray-600);
+				color: var(--gray-200);
+				padding: 9px 16px;
+				font-family: var(--font-body);
+				font-size: 13px;
+				cursor: pointer;
+				transition: var(--transition);
+			}
+			.add-row:hover {
+				border-color: var(--orange);
+				color: var(--orange-light);
+			}
+
+			/* ---------- submit / output ---------- */
+			.submit-bar {
+				padding: 56px 32px 0;
+				max-width: 1240px;
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
+			}
+
+			.submit-btn {
+				align-self: flex-start;
+				background: var(--orange);
+				color: var(--black);
+				border: none;
+				font-family: var(--font-display);
+				font-weight: 600;
+				font-size: 18px;
+				letter-spacing: 0.01em;
+				padding: 16px 34px;
+				cursor: pointer;
+				transition:
+					background var(--transition),
+					transform var(--transition);
+			}
+			.submit-btn:hover {
+				background: var(--orange-light);
+			}
+			.submit-btn:active {
+				background: var(--orange-dark);
+				transform: translateY(1px);
+			}
+
+			.hint {
+				font-size: 13px;
+				color: var(--gray-600);
+			}
+
+			.output-wrap {
+				display: none;
+				padding: 0 32px;
+				max-width: 1240px;
+				margin-top: 40px;
+			}
+			.output-wrap.show {
+				display: block;
+			}
+
+			.output-head {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 14px;
+				flex-wrap: wrap;
+				gap: 12px;
+			}
+
+			.output-head h3 {
+				font-family: var(--font-display);
+				font-size: 24px;
+				font-weight: 600;
+				margin: 0;
+			}
+
+			.output-actions {
+				display: flex;
+				gap: 10px;
+			}
+
+			.ghost-btn {
+				background: transparent;
+				border: 1px solid var(--gray-600);
+				color: var(--white);
+				font-family: var(--font-body);
+				font-size: 13px;
+				padding: 9px 18px;
+				cursor: pointer;
+				transition: var(--transition);
+			}
+			.ghost-btn:hover {
+				border-color: var(--orange);
+				color: var(--orange-light);
+			}
+			.ghost-btn.copied {
+				border-color: var(--orange);
+				color: var(--orange-light);
+			}
+
+			#jsonOutput {
+				width: 100%;
+				min-height: 420px;
+				background: var(--gray-800);
+				color: var(--gray-100);
+				border: 1px solid var(--gray-600);
+				padding: 20px;
+				font-family: "SFMono-Regular", Consolas, monospace;
+				font-size: 13px;
+				line-height: 1.6;
+				white-space: pre;
+				overflow: auto;
+			}
+
+			.toast {
+				position: fixed;
+				bottom: 28px;
+				right: 28px;
+				background: var(--orange);
+				color: var(--black);
+				padding: 14px 22px;
+				font-family: var(--font-display);
+				font-size: 15px;
+				font-weight: 600;
+				letter-spacing: 0.01em;
+				opacity: 0;
+				transform: translateY(8px);
+				pointer-events: none;
+				transition: var(--transition);
+				z-index: 100;
+			}
+			.toast.show {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="topbar">
+			<div class="mark">KAPI<span>PROJE</span></div>
+			<div class="status">Yeni proje kaydı</div>
+		</div>
+
+		<div class="intro">
+			<p class="num">Proje Veri Formu</p>
+			<p>
+				Aşağıdaki alanları doldurun. Formun sonunda, siteye eklenmeye hazır JSON verisini kopyalayabilir veya
+				dosya olarak indirebilirsiniz.
+			</p>
+		</div>
+
+		<form id="projectForm">
+			<!-- KIMLIK -->
+			<div class="section">
+				<div class="section-head">
+					<h2>01 — Kimlik</h2>
+					<p>Bu proje için sistemde kullanılacak benzersiz kimlik.</p>
+				</div>
+				<div class="fields">
+					<label class="field">
+						<span class="lbl">Proje ID</span>
+						<input type="text" name="projeID" placeholder="örn: soguk-hava-deposu-izmir-2024" required />
+					</label>
+				</div>
+			</div>
+
+			<!-- HERO -->
+			<div class="section">
+				<div class="section-head">
+					<h2>02 — Hero Bölümü</h2>
+					<p>Proje sayfasının en üstünde görünecek başlık alanı.</p>
+				</div>
+				<div class="fields">
+					<label class="field">
+						<span class="lbl">Hero Etiketi <b>(heroTag)</b></span>
+						<input type="text" name="heroSection.heroTag" placeholder="örn: Öne Çıkan Proje" />
+					</label>
+					<div class="row">
+						<label class="field">
+							<span class="lbl">Proje Başlığı <b>(heroTitle)</b></span>
+							<input type="text" name="heroSection.heroTitle" placeholder="örn: Endüstriyel Hızlı" />
+						</label>
+						<label class="field">
+							<span class="lbl">Başlık Vurgulu Kısım <b>(heroTitleEm)</b></span>
+							<input type="text" name="heroSection.heroTitleEm" placeholder="örn: Seri Kapı" />
+						</label>
+					</div>
+					<label class="field">
+						<span class="lbl">Kısa Açıklama <b>(heroSubText)</b></span>
+						<textarea
+							name="heroSection.heroSubText"
+							placeholder="Projeyi 1-2 cümleyle özetleyin."></textarea>
+					</label>
+
+					<div class="list-group" data-list="heroSection.heroMetaTags">
+						<span class="lbl"
+							>Meta Etiketler <b>(heroMetaTags)</b> — lokasyon tipi, kapı modeli, şehir/ülke, yıl gibi
+							kısa etiketler</span
+						>
+						<ol class="list-items hero-meta-tags">
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+						</ol>
+						<button type="button" class="add-row">+ Etiket Ekle</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- PROJECT STRIP -->
+			<div class="section">
+				<div class="section-head">
+					<h2>03 — Proje Şeridi</h2>
+					<p>Sayfada özet olarak gösterilecek dört bilgi.</p>
+				</div>
+				<div class="fields">
+					<div class="row">
+						<label class="field">
+							<span class="lbl">Kapı Modeli <b>(doorType)</b></span>
+							<input type="text" name="projectStrip.doorType" placeholder="örn: Hızlı Sarmal Kapı" />
+						</label>
+						<label class="field">
+							<span class="lbl">Kapı Adedi <b>(qty)</b></span>
+							<input type="text" name="projectStrip.qty" placeholder="örn: 24 Adet" />
+						</label>
+					</div>
+					<div class="row">
+						<label class="field">
+							<span class="lbl">Proje Yılı <b>(year)</b></span>
+							<input type="text" name="projectStrip.year" placeholder="örn: 2024" />
+						</label>
+						<label class="field">
+							<span class="lbl">Lokasyon <b>(location)</b></span>
+							<input type="text" name="projectStrip.location" placeholder="örn: İzmir, Türkiye" />
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- OVERVIEW -->
+			<div class="section">
+				<div class="section-head">
+					<h2>04 — Proje Genel Bakış</h2>
+					<p>Uzun başlık ve açıklama paragrafları.</p>
+				</div>
+				<div class="fields">
+					<div class="row">
+						<label class="field">
+							<span class="lbl">Uzun Başlık — Üst Satır <b>(titleTop)</b></span>
+							<input
+								type="text"
+								name="projectOverview.overViewTitle.titleTop"
+								placeholder="örn: Soğuk zincirde" />
+						</label>
+						<label class="field">
+							<span class="lbl">Uzun Başlık — Alt Satır <b>(titleBottom)</b></span>
+							<input
+								type="text"
+								name="projectOverview.overViewTitle.titleBottom"
+								placeholder="örn: kesintisiz performans" />
+						</label>
+					</div>
+
+					<div class="list-group" data-list="projectOverview.overviewParagraphs">
+						<span class="lbl">Açıklama Paragrafları <b>(overviewParagraphs)</b></span>
+						<ol class="list-items overviewParagraphs">
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+						</ol>
+						<button type="button" class="add-row">+ Paragraf Ekle</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- CHALLENGE / SOLUTION -->
+			<div class="section">
+				<div class="section-head">
+					<h2>05 — Zorluk &amp; Çözüm</h2>
+					<p>Projede karşılaşılan zorluklar ve bulunan çözümler.</p>
+				</div>
+				<div class="fields">
+					<label class="field">
+						<span class="lbl">Zorluk Açıklaması <b>(cs.challenge.text)</b></span>
+						<textarea
+							name="cs.challenge.text"
+							placeholder="Projede karşılaşılan zorluğu özetleyin."></textarea>
+					</label>
+					<div class="list-group challengeList" data-list="cs.challenge.challangeList">
+						<span class="lbl">Zorluk Listesi <b>(challangeList)</b></span>
+						<ol class="list-items">
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+						</ol>
+						<button type="button" class="add-row">+ Zorluk Ekle</button>
+					</div>
+
+					<label class="field" style="margin-top: 8px">
+						<span class="lbl">Çözüm Açıklaması <b>(cs.solution.text)</b></span>
+						<textarea
+							name="cs.solution.text"
+							placeholder="Zorluğa karşı bulunan çözümü özetleyin."></textarea>
+					</label>
+					<div class="list-group solutionList" data-list="cs.solution.solutionList">
+						<span class="lbl">Çözüm Listesi <b>(solutionList)</b></span>
+						<ol class="list-items">
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+						</ol>
+						<button type="button" class="add-row">+ Çözüm Ekle</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- GALLERY -->
+			<div class="section">
+				<div class="section-head">
+					<h2>06 — Proje Galerisi</h2>
+					<p>Fotoğraf bağlantılarını sırayla ekleyin.</p>
+				</div>
+				<div class="fields">
+					<div class="list-group" data-list="projectGallery">
+						<span class="lbl">Fotoğraf Linkleri <b>(projectGallery)</b></span>
+						<ol class="list-items">
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+						</ol>
+						<button type="button" class="add-row">+ Fotoğraf Linki Ekle</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- TECH SPECS -->
+			<div class="section">
+				<div class="section-head">
+					<h2>07 — Teknik Özellikler</h2>
+					<p>Kapının teknik veri sayfasında yer alacak değerler.</p>
+				</div>
+				<div class="fields">
+					<div class="row">
+						<label class="field">
+							<span class="lbl">Kapı Modeli <b>(doorModal)</b></span>
+							<input
+								type="text"
+								name="technicalSpecifications.doorModal"
+								placeholder="örn: SoğukHat SR-500" />
+						</label>
+						<label class="field">
+							<span class="lbl">Açılma Hızı <b>(openingSpeed)</b></span>
+							<input
+								type="text"
+								name="technicalSpecifications.openingSpeed"
+								placeholder="örn: 1.5 m/sn" />
+						</label>
+					</div>
+					<div class="row">
+						<label class="field">
+							<span class="lbl">Kapanma Hızı <b>(closingSpeed)</b></span>
+							<input
+								type="text"
+								name="technicalSpecifications.closingSpeed"
+								placeholder="örn: 0.8 m/sn" />
+						</label>
+						<label class="field">
+							<span class="lbl">Net Geçiş Ölçüleri <b>(clearOpening)</b></span>
+							<input
+								type="text"
+								name="technicalSpecifications.clearOpening"
+								placeholder="örn: 3000 x 3000 mm" />
+						</label>
+					</div>
+					<div class="row">
+						<label class="field">
+							<span class="lbl">Rüzgar Direnci <b>(windResistance)</b></span>
+							<input
+								type="text"
+								name="technicalSpecifications.windResistance"
+								placeholder="örn: Sınıf 3 (EN 12424)" />
+						</label>
+						<label class="field">
+							<span class="lbl">Perde Özelliği <b>(curtain)</b></span>
+							<input type="text" name="technicalSpecifications.curtain" placeholder="örn: PVC, izoleli" />
+						</label>
+					</div>
+					<label class="field">
+						<span class="lbl">Otomasyon / Aksesuar <b>(automation)</b></span>
+						<input
+							type="text"
+							name="technicalSpecifications.automation"
+							placeholder="örn: Radar sensör, yanıp sönen ışık" />
+					</label>
+				</div>
+			</div>
+
+			<!-- SIMILAR PROJECTS -->
+			<div class="section">
+				<div class="section-head">
+					<h2>08 — Benzer Projeler</h2>
+					<p>İlgili proje kimliklerini (projeID) ekleyin.</p>
+				</div>
+				<div class="fields">
+					<div class="list-group similarProjects" data-list="similarProjects">
+						<span class="lbl">Benzer Proje ID'leri <b>(similarProjects)</b></span>
+						<ol class="list-items">
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+							<li class="list-item">
+								<input type="text" class="list-input" placeholder="Değer girin" />
+								<button type="button" class="icon-btn">&times;</button>
+							</li>
+						</ol>
+						<button type="button" class="add-row">+ Proje ID Ekle</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="submit-bar">
+				<button type="submit" class="submit-btn">JSON Oluştur</button>
+				<span class="hint">Form gönderildiğinde aşağıda JS objesi olarak görüntülenecek.</span>
+			</div>
+		</form>
+
+		<div class="output-wrap" id="outputWrap">
+			<div class="output-head">
+				<h3>Oluşturulan Veri</h3>
+				<div class="output-actions">
+					<button type="button" class="ghost-btn" id="downloadBtn">.json İndir</button>
+				</div>
+			</div>
+			<textarea id="jsonOutput" readonly></textarea>
+		</div>
+
+		<div class="toast" id="toast"></div>
+
+		<script src="script.js"></script>
+	</body>
+</html>
